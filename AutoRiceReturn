@@ -1,62 +1,58 @@
--- Function to move the turtle up
+-- Function to move up in the air
 function riseUp(levels)
     for i = 1, levels do
         turtle.up()
     end
 end
 
--- Function to move to a specific coordinate at a fixed altitude
-function goTo(x, y, z)
-    local currentX, currentY, currentZ = gps.locate(5)  -- Get current coordinates
+-- Simple function to move to a specific coordinate at a fixed altitude
+function goTo(x, z)
+    local currentX, currentZ = gps.locate(5)  -- Assume Y is constant; ignore it here
     if not currentX then
         print("GPS not available. Make sure you're in range of a GPS satellite network.")
         return
     end
 
-    riseUp(3)  -- Rise 3 blocks in the air to avoid obstacles
+    -- Ascend to avoid obstacles
+    riseUp(3)
 
-    -- Move to the correct X position while maintaining altitude
+    -- Move to the correct X position
     while currentX < x do
-        while not facing("east") do turtle.turnRight() end
-        turtle.forward()
+        while not turtle.forward() do
+            turtle.dig()
+        end
         currentX = currentX + 1
     end
     while currentX > x do
-        while not facing("west") do turtle.turnRight() end
-        turtle.forward()
+        turtle.turnLeft()
+        turtle.turnLeft()  -- Turn around to go backwards
+        while not turtle.forward() do
+            turtle.dig()
+        end
         currentX = currentX - 1
+        turtle.turnLeft()
+        turtle.turnLeft()  -- Reorient to original direction
     end
 
-    -- Move to the correct Z position while maintaining altitude
+    -- Move to the correct Z position
     while currentZ < z do
-        while not facing("south") do turtle.turnRight() end
-        turtle.forward()
+        turtle.turnRight()  -- Turn to face positive Z direction
+        while not turtle.forward() do
+            turtle.dig()
+        end
         currentZ = currentZ + 1
+        turtle.turnLeft()  -- Reorient to original direction
     end
     while currentZ > z do
-        while not facing("north") do turtle.turnRight() end
-        turtle.forward()
+        turtle.turnLeft()  -- Turn to face negative Z direction
+        while not turtle.forward() do
+            turtle.dig()
+        end
         currentZ = currentZ - 1
+        turtle.turnRight()  -- Reorient to original direction
     end
-
-    -- Adjust to the correct Y level if needed
-    while currentY < y do
-        turtle.up()
-        currentY = currentY + 1
-    end
-    while currentY > y do
-        turtle.down()
-        currentY = currentY - 1
-    end
-end
-
--- Check orientation function to assist goTo function
-function facing(direction)
-    local facingDir = {"north", "east", "south", "west"}
-    local _, orientation = gps.locate(5)
-    return facingDir[(orientation % 4) + 1] == direction
 end
 
 -- Main execution
-goTo(-337, 64, -16)  -- Go to the coordinates (-337, 64, -16)
-while not facing("north") do turtle.turnRight() end  -- Face north
+goTo(-337, -16)  -- Adjust the coordinates as needed (x and z)
+-- Ensure the turtle is facing north manually or add additional logic for orientation if necessary
