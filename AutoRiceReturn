@@ -15,18 +15,18 @@ function determineDirection()
     local newX, newY, newZ = gps.locate(5)
     print("Position after moving forward: X=" .. newX .. ", Y=" .. newY .. ", Z=" .. newZ)
 
-    -- Determine if X or Z has changed
+    -- Determine if X or Z has changed and print facing direction
     if newX ~= startX then
         if newX > startX then
-            print("Facing East")
+            print("Initially facing East")
         else
-            print("Facing West")
+            print("Initially facing West")
         end
     elseif newZ ~= startZ then
         if newZ > startZ then
-            print("Facing South")
+            print("Initially facing South")
         else
-            print("Facing North")
+            print("Initially facing North")
         end
     end
 
@@ -35,11 +35,13 @@ function determineDirection()
 
     -- Turn left and move forward to check again (optional verification)
     turtle.turnLeft()
+    print("Turned left.")
     turtle.forward()
     local checkX, checkY, checkZ = gps.locate(5)
     print("Position after turning left and moving forward: X=" .. checkX .. ", Y=" .. checkY .. ", Z=" .. checkZ)
     turtle.back()
 
+    -- Determine and print new facing direction after turn
     if checkX ~= newX then
         if checkX > newX then
             print("Now facing East")
