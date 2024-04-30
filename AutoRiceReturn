@@ -35,18 +35,18 @@ function determineDirection()
     turtle.turnLeft()
     print("Turned left.")
     turtle.forward()
-    local checkX, _, checkZ = gps.locate(5)
+    local checkX, checkY, checkZ = gps.locate(5)
     turtle.back()
 
-    -- Determine new facing direction
+    -- Correcting the logic for determining the new facing direction after turning left
     local newFacing = ""
-    if checkX > newX then
-        newFacing = "East"
-    elseif checkX < newX then
+    if initialFacing == "North" then
         newFacing = "West"
-    elseif checkZ > newZ then
+    elseif initialFacing == "West" then
         newFacing = "South"
-    elseif checkZ < newZ then
+    elseif initialFacing == "South" then
+        newFacing = "East"
+    elseif initialFacing == "East" then
         newFacing = "North"
     end
     print("After turning left, now facing " .. newFacing)
@@ -57,3 +57,4 @@ end
 -- Main execution
 riseUp(3)
 determineDirection()
+
