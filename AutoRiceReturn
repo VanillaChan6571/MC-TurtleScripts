@@ -1,63 +1,59 @@
-function goTo(targetX, targetZ)
-    local currentX, currentY, currentZ = gps.locate(5)
-    if not currentX then
-        print("GPS not available. Make sure you're in range of a GPS satellite network.")
-        return
-    else
-        print("Current position: X=" .. currentX .. ", Y=" .. currentY .. ", Z=" .. currentZ)
-    end
-
-    -- Navigate to the correct X coordinate
-    if currentX < targetX then
-        while not facingEast() do turtle.turnRight() end
-        repeat
-            if not turtle.forward() then turtle.dig() end
-            currentX = gps.locate(5)
-        until currentX >= targetX
-    elseif currentX > targetX then
-        while not facingWest() do turtle.turnRight() end
-        repeat
-            if not turtle.forward() then turtle.dig() end
-            currentX = gps.locate(5)
-        until currentX <= targetX
-    end
-
-    -- Navigate to the correct Z coordinate
-    if currentZ < targetZ then
-        while not facingSouth() do turtle.turnRight() end
-        repeat
-            if not turtle.forward() then turtle.dig() end
-            currentZ = gps.locate(5)
-        until currentZ >= targetZ
-    elseif currentZ > targetZ then
-        while not facingNorth() do turtle.turnRight() end
-        repeat
-            if not turtle.forward() then turtle.dig() end
-            currentZ = gps.locate(5)
-        until currentZ <= targetZ
+-- Function to raise the turtle 3 blocks up
+function riseUp(levels)
+    for i = 1, levels do
+        turtle.up()
     end
 end
 
--- Direction checks
-function facingNorth()
-    local _, orientation = gps.locate(5)
-    return orientation == 0
+-- Function to determine facing direction
+function determineDirection()
+    local startX, startY, startZ = gps.locate(5)
+
+    -- Move forward and check coordinates
+    turtle.forward()
+    local newX, newY, newZ = gps.locate(5)
+
+    -- Determine if X or Z has changed
+    if newX ~= startX then
+        if newX > startX then
+            print("Facing East")
+        else
+            print("Facing West")
+        end
+    elseif newZ ~= startZ then
+        if newZ > startZ then
+            print("Facing South")
+        else
+            print("Facing North")
+        end
+    end
+
+    -- Move back to original position
+    turtle.back()
+
+    -- Turn left and move forward to check again (optional verification)
+    turtle.turnLeft()
+    turtle.forward()
+    local checkX, checkY, checkZ = gps.locate(5)
+    turtle.back()
+
+    if checkX ~= newX then
+        if checkX > newX then
+            print("Now facing East")
+        else
+            print("Now facing West")
+        end
+    elseif checkZ ~= newZ then
+        if checkZ > newZ then
+            print("Now facing South")
+        else
+            print("Now facing North")
+        end
+    end
+
+    turtle.turnRight() -- Realign to original facing before the check
 end
 
-function facingEast()
-    local _, orientation = gps.locate(5)
-    return orientation == 1
-end
-
-function facingSouth()
-    local _, orientation = gps.locate(5)
-    return orientation == 2
-end
-
-function facingWest()
-    local _, orientation = gps.locate(5)
-    return orientation == 3
-end
-
--- Start the movement
-goTo(-337, -16)
+-- Main execution
+riseUp(3)
+determineDirection()
