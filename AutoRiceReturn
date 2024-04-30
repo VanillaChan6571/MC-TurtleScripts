@@ -63,8 +63,8 @@ function goToDock(xDock, yDock, zDock)
     while x ~= xDock do
         turtle.forward()
         movementCount = movementCount + 1
-        if movementCount % 5 == 0 then
-            print("Moved 5 blocks along X-axis, re-checking position")
+        if movementCount % 30 == 0 then
+            print("Moved 30 blocks along X-axis, re-checking position")
             x, _, _ = gps.locate(5)
             print("Current position: X=" .. x)
             if xDock > x then
@@ -90,8 +90,8 @@ function goToDock(xDock, yDock, zDock)
     while z ~= zDock do
         turtle.forward()
         movementCount = movementCount + 1
-        if movementCount % 5 == 0 then
-            print("Moved 5 blocks along Z-axis, re-checking position")
+        if movementCount % 30 == 0 then
+            print("Moved 30 blocks along Z-axis, re-checking position")
             _, _, z = gps.locate(5)
             print("Current position: Z=" .. z)
             if zDock > z then
