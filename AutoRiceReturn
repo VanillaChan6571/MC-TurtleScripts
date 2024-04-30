@@ -36,42 +36,40 @@ function goToDock(xDock, yDock, zDock)
     print("Facing " .. direction)
     os.sleep(2)  -- Waiting for 2-3 seconds before moving
 
-    if direction == "North" or direction == "South" then
-        -- Move along the Z-axis
-        while z ~= zDock do
-            if z < zDock then
-                while direction ~= "South" do 
-                    turtle.turnRight()
-                    direction = determineDirection()
-                end
-                turtle.forward()
-            elseif z > zDock then
-                while direction ~= "North" do
-                    turtle.turnRight()
-                    direction = determineDirection()
-                end
-                turtle.forward()
+    -- Move along the X-axis
+    while x ~= xDock do
+        if x < xDock then
+            while direction ~= "East" do 
+                turtle.turnRight()
+                direction = determineDirection()
             end
-            _, _, z = gps.locate(5)
-        end
-    elseif direction == "East" or direction == "West" then
-        -- Move along the X-axis
-        while x ~= xDock do
-            if x < xDock then
-                while direction ~= "East" do
-                    turtle.turnRight()
-                    direction = determineDirection()
-                end
-                turtle.forward()
-            elseif x > xDock then
-                while direction ~= "West" do
-                    turtle.turnRight()
-                    direction = determineDirection()
-                end
-                turtle.forward()
+            turtle.forward()
+        elseif x > xDock then
+            while direction ~= "West" do
+                turtle.turnRight()
+                direction = determineDirection()
             end
-            x, _, _ = gps.locate(5)
+            turtle.forward()
         end
+        x, _, _ = gps.locate(5)
+    end
+
+    -- Move along the Z-axis
+    while z ~= zDock do
+        if z < zDock then
+            while direction ~= "South" do 
+                turtle.turnRight()
+                direction = determineDirection()
+            end
+            turtle.forward()
+        elseif z > zDock then
+            while direction ~= "North" do
+                turtle.turnRight()
+                direction = determineDirection()
+            end
+            turtle.forward()
+        end
+        _, _, z = gps.locate(5)
     end
 
     -- Move along the Y-axis to the docking level, if needed
