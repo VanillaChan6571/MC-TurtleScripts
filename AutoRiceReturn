@@ -72,7 +72,7 @@ function goToDock(xDock, yDock, zDock)
         _, _, z = gps.locate(5)
     end
 
-    -- Move along the Y-axis to the docking level, if needed
+    -- Move along the Y-axis to the docking level
     while y ~= yDock do
         if y < yDock then
             turtle.up()
@@ -82,7 +82,14 @@ function goToDock(xDock, yDock, zDock)
         _, y, _ = gps.locate(5)
     end
 
+    -- Face North when arrived at the docking station
+    while direction ~= "North" do
+        turtle.turnLeft()
+        direction = determineDirection()
+    end
+
     print("Arrived at docking station: X=" .. xDock .. ", Y=" .. yDock .. ", Z=" .. zDock)
+    print("Facing North")
 end
 
 -- Example execution
