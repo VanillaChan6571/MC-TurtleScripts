@@ -3,40 +3,55 @@ function goTo(targetX, targetZ)
     if not currentX then
         print("GPS not available. Make sure you're in range of a GPS satellite network.")
         return
+    else
+        print("Current position: X=" .. currentX .. ", Y=" .. currentY .. ", Z=" .. currentZ)
     end
 
     -- Move to target X
-    while currentX < targetX do
-        turtle.turnRight()
-        while not turtle.forward() do turtle.dig() end
-        currentX = currentX + 1
+    if currentX < targetX then
+        turtle.turnRight()  -- Face positive X direction
+        print("Turning to face positive X direction.")
+    elseif currentX > targetX then
+        turtle.turnLeft() -- Face negative X direction
+        print("Turning to face negative X direction.")
     end
-    while currentX > targetX do
-        turtle.turnLeft()
-        turtle.turnLeft()
-        while not turtle.forward() do turtle.dig() end
-        currentX = currentX - 1
-        turtle.turnLeft()
-        turtle.turnLeft()
+
+    while currentX ~= targetX do
+        if not turtle.forward() then
+            turtle.dig()
+            print("Obstacle detected, digging...")
+        else
+            print("Moving to X=" .. targetX)
+        end
+        currentX, _, _ = gps.locate(5)
     end
 
     -- Move to target Z
-    while currentZ < targetZ do
-        turtle.turnRight()
-        while not turtle.forward() do turtle.dig() end
-        currentZ = currentZ + 1
-    end
-    while currentZ > targetZ do
-        turtle.turnLeft()
-        turtle.turnLeft()
-        while not turtle.forward() do turtle.dig() end
-        currentZ = currentZ - 1
-        turtle.turnRight()
-        turtle.turnRight()
+    if currentZ < targetZ then
+        turtle.turnRight()  -- Face positive Z direction
+        print("Turning to face positive Z direction.")
+    elseif currentZ > targetZ then
+        turtle.turnLeft() -- Face negative Z direction
+        print("Turning to face negative Z direction.")
     end
 
-    -- Face north (assuming north is 0 degrees)
-    while not facing("north") do turtle.turnRight() end
+    while currentZ ~= targetZ do
+        if not turtle.forward() then
+            turtle.dig()
+            print("Obstacle detected, digging...")
+        else
+            print("Moving to Z=" .. targetZ)
+        end
+        _, _, currentZ = gps.locate(5)
+    end
+
+    -- Ensure the turtle faces north
+    print("Adjusting to face north.")
+    while not facing("north") do
+        turtle.turnRight()
+        print("Turning right to find north...")
+    end
+    print("Now facing north.")
 end
 
 -- Function to check the turtle's facing direction
