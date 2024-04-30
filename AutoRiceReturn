@@ -29,47 +29,9 @@ function determineDirection()
     return initialFacing -- Return the direction as a string
 end
 
-    turtle.back()  -- Move back to original position
-    turtle.turnLeft()  -- Turn left and check new direction
-    turtle.forward()
-    turtle.back()
-    turtle.turnRight()  -- Realign to original facing direction
-
-    return initialFacing  -- Return the direction as a string
-end
-
-    -- Move back to original position
-    turtle.back()
-
-    -- Turn left and move forward to check again
-    turtle.turnLeft()
-    print("Turned left.")
-    turtle.forward()
-    local checkX, checkY, checkZ = gps.locate(5)
-    turtle.back()
-
-    -- Correcting the logic for determining the new facing direction after turning left
-    local newFacing = ""
-    if initialFacing == "North" then
-        newFacing = "West"
-    elseif initialFacing == "West" then
-        newFacing = "South"
-    elseif initialFacing == "South" then
-        newFacing = "East"
-    elseif initialFacing == "East" then
-        newFacing = "North"
-    end
-    print("After turning left, now facing " .. newFacing)
-
-    turtle.turnRight() -- Realign to original facing before the check
-end
-
 function goToDock(xDock, yDock, zDock)
     local x, y, z = gps.locate(5)
     print("Current location: X=" .. x .. ", Y=" .. y .. ", Z=" .. z)
-    local direction = determineDirection()
-    print("Facing " .. direction)
-
     local direction = determineDirection()
     print("Facing " .. direction)
     os.sleep(2)  -- Waiting for 2-3 seconds before moving
