@@ -1,0 +1,66 @@
+-- Function to check fuel level and refuel if necessary
+function checkFuel()
+    if turtle.getFuelLevel() < 256 then  -- Assuming 256 is enough fuel to complete the task once
+        turtle.select(1)  -- Select the first slot for fuel, ensure it has coal or other fuel items
+        turtle.refuel(1)  -- Refuel with one item
+    end
+end
+
+-- Function to unload items
+function unloadItems()
+    for i = 2, 16 do  -- Assuming slot 1 is reserved for fuel
+        turtle.select(i)
+        turtle.drop()  -- Drop all items, ensure there's a chest in front of the turtle
+    end
+end
+
+-- Function to move in a square pattern
+function mineSquare()
+    for i = 1, 16 do
+        for j = 1, 15 do
+            checkFuel()
+            turtle.dig()
+            turtle.forward()
+        end
+        if i ~= 16 then
+            if i % 2 == 0 then
+                turtle.turnRight()
+                turtle.dig()
+                turtle.forward()
+                turtle.turnRight()
+            else
+                turtle.turnLeft()
+                turtle.dig()
+                turtle.forward()
+                turtle.turnLeft()
+            end
+        end
+    end
+end
+
+-- Return to starting position
+function returnToStart()
+    turtle.turnRight()
+    turtle.turnRight()
+    for i = 1, 15 do
+        turtle.forward()
+    end
+    turtle.turnRight()
+    for i = 1, 15 do
+        turtle.forward()
+    end
+    turtle.turnRight()
+end
+
+-- Main loop
+while true do
+    checkFuel()
+    mineSquare()
+    returnToStart()
+    unloadItems()
+    turtle.turnRight() -- Assuming the fuel chest is on the right
+    checkFuel()
+    turtle.turnLeft()
+    print("Waiting for 4 minutes...")
+    os.sleep(240)  -- Wait for 4 minutes
+end
