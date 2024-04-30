@@ -98,9 +98,7 @@ function goToDock(xDock, yDock, zDock)
     print("Facing North")
 end
 
--- Example execution
-goToDock(-337, 64, -16)
-
 -- Main execution
-riseUp(3)
-determineDirection()
+riseUp(3)  -- Rise up 3 levels before moving to the docking station
+determineDirection()  -- Determine the initial facing direction
+goToDock(-337, 64, -16)  -- Move to the docking station
