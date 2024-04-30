@@ -2,6 +2,7 @@
 function riseUp(levels)
     for i = 1, levels do
         turtle.up()
+        print("Rising up, current level: " .. i)
     end
 end
 
@@ -25,6 +26,7 @@ function determineDirection()
     end
     
     turtle.back() -- Move back to original position
+    print("Determined initial facing direction: " .. initialFacing)
     
     return initialFacing -- Return the direction as a string
 end
@@ -33,7 +35,7 @@ function goToDock(xDock, yDock, zDock)
     local x, y, z = gps.locate(5)
     print("Current location: X=" .. x .. ", Y=" .. y .. ", Z=" .. z)
     local direction = determineDirection()
-    print("Facing " .. direction)
+    print("Initial facing direction: " .. direction)
     os.sleep(2)  -- Waiting for 2-3 seconds before moving
 
     -- Turn to face the correct direction for X-axis movement
@@ -41,11 +43,13 @@ function goToDock(xDock, yDock, zDock)
         while direction ~= "East" do 
             turtle.turnRight()
             direction = determineDirection()
+            print("Turning right to face East")
         end
     elseif xDock < x then
         while direction ~= "West" do
             turtle.turnRight()
             direction = determineDirection()
+            print("Turning right to face West")
         end
     end
 
@@ -53,6 +57,7 @@ function goToDock(xDock, yDock, zDock)
     while x ~= xDock do
         turtle.forward()
         x, _, _ = gps.locate(5)
+        print("Moving along X-axis, current position: X=" .. x)
     end
 
     -- Turn to face the correct direction for Z-axis movement
@@ -60,11 +65,13 @@ function goToDock(xDock, yDock, zDock)
         while direction ~= "South" do 
             turtle.turnRight()
             direction = determineDirection()
+            print("Turning right to face South")
         end
     elseif zDock < z then
         while direction ~= "North" do
             turtle.turnRight()
             direction = determineDirection()
+            print("Turning right to face North")
         end
     end
 
@@ -72,22 +79,27 @@ function goToDock(xDock, yDock, zDock)
     while z ~= zDock do
         turtle.forward()
         _, _, z = gps.locate(5)
+        print("Moving along Z-axis, current position: Z=" .. z)
     end
 
     -- Move along the Y-axis to the docking level
     while y ~= yDock do
         if y < yDock then
             turtle.up()
+            print("Moving up along Y-axis")
         elseif y > yDock then
             turtle.down()
+            print("Moving down along Y-axis")
         end
         _, y, _ = gps.locate(5)
+        print("Current Y position: " .. y)
     end
 
     -- Face North when arrived at the docking station
     while direction ~= "North" do
         turtle.turnLeft()
         direction = determineDirection()
+        print("Turning left to face North")
     end
 
     print("Arrived at docking station: X=" .. xDock .. ", Y=" .. yDock .. ", Z=" .. zDock)
