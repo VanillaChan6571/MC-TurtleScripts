@@ -52,9 +52,15 @@ function returnToStart()
     turtle.turnRight()
 end
 
+-- Function to position the turtle for the start of mining
+function startPosition()
+    turtle.forward()  -- Move the turtle forward one block to start the 16x16 area correctly
+end
+
 -- Main loop
 while true do
     checkFuel()
+    startPosition()  -- Position the turtle at the start of the 16x16 area
     mineSquare()
     returnToStart()
     unloadItems()
