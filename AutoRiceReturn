@@ -31,6 +31,18 @@ function determineDirection()
     return initialFacing -- Return the direction as a string
 end
 
+function turnToFace(targetDirection)
+    while true do
+        local currentDirection = determineDirection()
+        if currentDirection == targetDirection then
+            break
+        else
+            turtle.turnLeft()
+            print("Turning left to face " .. targetDirection)
+        end
+    end
+end
+
 function goToDock(xDock, yDock, zDock)
     local x, y, z = gps.locate(5)
     print("Current location: X=" .. x .. ", Y=" .. y .. ", Z=" .. z)
@@ -40,17 +52,9 @@ function goToDock(xDock, yDock, zDock)
 
     -- Turn to face the correct direction for X-axis movement
     if xDock > x then
-        while direction ~= "East" do 
-            turtle.turnRight()
-            direction = determineDirection()
-            print("Turning right to face East")
-        end
+        turnToFace("East")
     elseif xDock < x then
-        while direction ~= "West" do
-            turtle.turnRight()
-            direction = determineDirection()
-            print("Turning right to face West")
-        end
+        turnToFace("West")
     end
 
     -- Move along the X-axis
@@ -62,17 +66,9 @@ function goToDock(xDock, yDock, zDock)
 
     -- Turn to face the correct direction for Z-axis movement
     if zDock > z then
-        while direction ~= "South" do 
-            turtle.turnRight()
-            direction = determineDirection()
-            print("Turning right to face South")
-        end
+        turnToFace("South")
     elseif zDock < z then
-        while direction ~= "North" do
-            turtle.turnRight()
-            direction = determineDirection()
-            print("Turning right to face North")
-        end
+        turnToFace("North")
     end
 
     -- Move along the Z-axis
@@ -96,11 +92,7 @@ function goToDock(xDock, yDock, zDock)
     end
 
     -- Face North when arrived at the docking station
-    while direction ~= "North" do
-        turtle.turnLeft()
-        direction = determineDirection()
-        print("Turning left to face North")
-    end
+    turnToFace("North")
 
     print("Arrived at docking station: X=" .. xDock .. ", Y=" .. yDock .. ", Z=" .. zDock)
     print("Facing North")
