@@ -64,13 +64,16 @@ function goToDock(xDock, yDock, zDock)
         turtle.forward()
         movementCount = movementCount + 1
         if movementCount % 5 == 0 then
+            print("Moved 5 blocks along X-axis, re-checking position")
             x, _, _ = gps.locate(5)
-            print("Re-checking position on X-axis, current position: X=" .. x)
+            print("Current position: X=" .. x)
             if xDock > x then
                 turnToFace("East")
             elseif xDock < x then
                 turnToFace("West")
             end
+        else
+            x, _, _ = gps.locate(5)
         end
     end
 
@@ -88,13 +91,16 @@ function goToDock(xDock, yDock, zDock)
         turtle.forward()
         movementCount = movementCount + 1
         if movementCount % 5 == 0 then
+            print("Moved 5 blocks along Z-axis, re-checking position")
             _, _, z = gps.locate(5)
-            print("Re-checking position on Z-axis, current position: Z=" .. z)
+            print("Current position: Z=" .. z)
             if zDock > z then
                 turnToFace("South")
             elseif zDock < z then
                 turnToFace("North")
             end
+        else
+            _, _, z = gps.locate(5)
         end
     end
 
