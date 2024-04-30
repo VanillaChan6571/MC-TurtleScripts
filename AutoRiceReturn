@@ -8,15 +8,11 @@ end
 -- Function to determine facing direction
 function determineDirection()
     local startX, startY, startZ = gps.locate(5)
-    print("Initial position: X=" .. startX .. ", Y=" .. startY .. ", Z=" .. startZ)
-
-    -- Move forward and check coordinates
-    turtle.forward()
     local newX, newY, newZ = gps.locate(5)
-    print("Position after moving forward: X=" .. newX .. ", Y=" .. newY .. ", Z=" .. newZ)
-
-    -- Determine initial facing direction
+    turtle.forward()
     local initialFacing = ""
+    
+    -- Determine initial facing direction
     if newX > startX then
         initialFacing = "East"
     elseif newX < startX then
@@ -26,7 +22,15 @@ function determineDirection()
     elseif newZ < startZ then
         initialFacing = "North"
     end
-    print("Initially facing " .. initialFacing)
+
+    turtle.back()  -- Move back to original position
+    turtle.turnLeft()  -- Turn left and check new direction
+    turtle.forward()
+    turtle.back()
+    turtle.turnRight()  -- Realign to original facing direction
+
+    return initialFacing  -- Return the direction as a string
+end
 
     -- Move back to original position
     turtle.back()
