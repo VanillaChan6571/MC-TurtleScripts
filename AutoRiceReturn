@@ -40,10 +40,10 @@ function goToDock(xDock, yDock, zDock)
         -- Move along the Z-axis
         while z ~= zDock do
             if z < zDock then
-                while not facing("South") do turtle.turnRight() end
+                while not turtle.getFacingDirection() == "South" do turtle.turnRight() end
                 turtle.forward()
             elseif z > zDock then
-                while not facing("North") do turtle.turnRight() end
+                while not turtle.getFacingDirection() == "North" do turtle.turnRight() end
                 turtle.forward()
             end
             _, _, z = gps.locate(5)
@@ -52,10 +52,10 @@ function goToDock(xDock, yDock, zDock)
         -- Move along the X-axis
         while x ~= xDock do
             if x < xDock then
-                while not facing("East") do turtle.turnRight() end
+                while not turtle.getFacingDirection() == "East" do turtle.turnRight() end
                 turtle.forward()
             elseif x > xDock then
-                while not facing("West") do turtle.turnRight() end
+                while not turtle.getFacingDirection() == "West" do turtle.turnRight() end
                 turtle.forward()
             end
             x, _, _ = gps.locate(5)
