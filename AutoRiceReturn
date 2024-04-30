@@ -120,32 +120,9 @@ function goToDock(xDock, yDock, zDock)
     -- Face North when arrived at the docking station
     turnToFace("North")
 
-    -- Double-check if the turtle is in the correct spot at the docks
-    local currentX, currentY, currentZ = gps.locate(5)
-    if currentX == xDock and currentY == yDock and currentZ == zDock then
-        print("Arrived at the correct docking station coordinates.")
-    else
-        print("Adjusting position to reach the correct docking station coordinates.")
-        while currentX ~= xDock do
-            if currentX < xDock then
-                turtle.forward()
-            elseif currentX > xDock then
-                turtle.back()
-            end
-            currentX, _, _ = gps.locate(5)
-        end
-        while currentZ ~= zDock do
-            if currentZ < zDock then
-                turtle.forward()
-            elseif currentZ > zDock then
-                turtle.back()
-            end
-            _, _, currentZ = gps.locate(5)
-        end
-        print("Arrived at the correct docking station coordinates after adjustment.")
-    end
-
-    print("Docked and facing North.")
+    print("Arrived at docking station: X=" .. xDock .. ", Y=" .. yDock .. ", Z=" .. zDock)
+    print("Facing North")
+    turtle.back(1)
 end
 
 -- Main execution
