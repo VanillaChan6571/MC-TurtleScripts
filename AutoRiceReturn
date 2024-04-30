@@ -54,7 +54,56 @@ function determineDirection()
     turtle.turnRight() -- Realign to original facing before the check
 end
 
+function goToDock(xDock, yDock, zDock)
+    local x, y, z = gps.locate(5)
+    print("Current location: X=" .. x .. ", Y=" .. y .. ", Z=" .. z)
+
+    local direction = determineDirection()
+    print("Facing " .. direction)
+    os.sleep(2)  -- Waiting for 2-3 seconds before moving
+
+    if direction == "North" or direction == "South" then
+        -- Move along the Z-axis
+        while z ~= zDock do
+            if z < zDock then
+                while not facing("South") do turtle.turnRight() end
+                turtle.forward()
+            elseif z > zDock then
+                while not facing("North") do turtle.turnRight() end
+                turtle.forward()
+            end
+            _, _, z = gps.locate(5)
+        end
+    elseif direction == "East" or direction == "West" then
+        -- Move along the X-axis
+        while x ~= xDock do
+            if x < xDock then
+                while not facing("East") do turtle.turnRight() end
+                turtle.forward()
+            elseif x > xDock then
+                while not facing("West") do turtle.turnRight() end
+                turtle.forward()
+            end
+            x, _, _ = gps.locate(5)
+        end
+    end
+
+    -- Move along the Y-axis to the docking level, if needed
+    while y ~= yDock do
+        if y < yDock then
+            turtle.up()
+        elseif y > yDock then
+            turtle.down()
+        end
+        _, y, _ = gps.locate(5)
+    end
+
+    print("Arrived at docking station: X=" .. xDock .. ", Y=" .. yDock .. ", Z=" .. zDock)
+end
+
+-- Example execution
+goToDock(-337, 64, -16)
+
 -- Main execution
 riseUp(3)
 determineDirection()
-
