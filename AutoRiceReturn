@@ -1,0 +1,65 @@
+-- Function to move the turtle up
+function riseUp(levels)
+    for i = 1, levels do
+        turtle.up()
+    end
+end
+
+-- Function to move to a specific coordinate
+function goTo(x, y, z)
+    local currentX, currentY, currentZ = gps.locate(5)  -- Get current coordinates
+    if not currentX then
+        print("GPS not available. Make sure you're in range of a GPS satellite network.")
+        return
+    end
+
+    -- Move to the correct Y level (height)
+    while currentY < y do
+        turtle.up()
+        currentY = currentY + 1
+    end
+    while currentY > y do
+        turtle.down()
+        currentY = currentY - 1
+    end
+
+    -- Move to the correct X position
+    while currentX < x do
+        -- Face east (assuming north is 0, east is 1, south is 2, west is 3)
+        while not facing("east") do turtle.turnRight() end
+        turtle.forward()
+        currentX = currentX + 1
+    end
+    while currentX > x do
+        -- Face west
+        while not facing("west") do turtle.turnRight() end
+        turtle.forward()
+        currentX = currentX - 1
+    end
+
+    -- Move to the correct Z position
+    while currentZ < z do
+        -- Face south
+        while not facing("south") do turtle.turnRight() end
+        turtle.forward()
+        currentZ = currentZ + 1
+    end
+    while currentZ > z do
+        -- Face north
+        while not facing("north") do turtle.turnRight() end
+        turtle.forward()
+        currentZ = currentZ - 1
+    end
+end
+
+-- Check orientation function to assist goTo function
+function facing(direction)
+    local facingDir = {"north", "east", "south", "west"}
+    local _, orientation = gps.locate(5)
+    return facingDir[(orientation % 4) + 1] == direction
+end
+
+-- Main execution
+riseUp(3)  -- Rise 3 blocks
+goTo(-337, 64, -16)  -- Go to the coordinates (-337, 64, -16)
+while not facing("north") do turtle.turnRight() end  -- Face north
