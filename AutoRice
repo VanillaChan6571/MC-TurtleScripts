@@ -57,10 +57,51 @@ function startPosition()
     turtle.forward()  -- Move the turtle forward one block to start the 16x16 area correctly
 end
 
--- Main loop
+-- Adjusted mineSquare function to handle turns and rows correctly
+function mineSquare()
+    for i = 1, 16 do
+        for j = 1, 15 do
+            checkFuel()
+            turtle.dig()
+            turtle.forward()
+        end
+        if i ~= 16 then  -- Only turn if not at the end of the last row
+            if i % 2 == 1 then  -- If i is odd, turn to the right
+                turtle.turnRight()
+                turtle.dig()
+                turtle.forward()
+                turtle.turnRight()
+            else  -- If i is even, turn to the left
+                turtle.turnLeft()
+                turtle.dig()
+                turtle.forward()
+                turtle.turnLeft()
+            end
+        end
+    end
+end
+
+-- Improved returnToStart function to maintain correct orientation
+function returnToStart()
+    if (16 % 2 == 1) then  -- If you finish on an odd row, you need to adjust turning to return correctly
+        turtle.turnRight()
+    else
+        turtle.turnLeft()
+    end
+    for i = 1, 15 do
+        turtle.forward()
+    end
+    turtle.turnRight()
+    for i = 1, 15 do
+        turtle.forward()
+    end
+    turtle.turnRight()
+end
+
+-- Main loop remains the same
 while true do
     checkFuel()
-    startPosition()  -- Position the turtle at the start of the 16x16 area
+    startPosition()  -- Ensure it starts from the correct offset
     mineSquare()
     returnToStart()
     unloadItems()
