@@ -50,6 +50,8 @@ function goToDock(xDock, yDock, zDock)
     print("Initial facing direction: " .. direction)
     os.sleep(2)  -- Waiting for 2-3 seconds before moving
 
+    local movementCount = 0
+
     -- Turn to face the correct direction for X-axis movement
     if xDock > x then
         turnToFace("East")
@@ -60,9 +62,19 @@ function goToDock(xDock, yDock, zDock)
     -- Move along the X-axis
     while x ~= xDock do
         turtle.forward()
-        x, _, _ = gps.locate(5)
-        print("Moving along X-axis, current position: X=" .. x)
+        movementCount = movementCount + 1
+        if movementCount % 5 == 0 then
+            x, _, _ = gps.locate(5)
+            print("Re-checking position on X-axis, current position: X=" .. x)
+            if xDock > x then
+                turnToFace("East")
+            elseif xDock < x then
+                turnToFace("West")
+            end
+        end
     end
+
+    movementCount = 0
 
     -- Turn to face the correct direction for Z-axis movement
     if zDock > z then
@@ -74,8 +86,16 @@ function goToDock(xDock, yDock, zDock)
     -- Move along the Z-axis
     while z ~= zDock do
         turtle.forward()
-        _, _, z = gps.locate(5)
-        print("Moving along Z-axis, current position: Z=" .. z)
+        movementCount = movementCount + 1
+        if movementCount % 5 == 0 then
+            _, _, z = gps.locate(5)
+            print("Re-checking position on Z-axis, current position: Z=" .. z)
+            if zDock > z then
+                turnToFace("South")
+            elseif zDock < z then
+                turnToFace("North")
+            end
+        end
     end
 
     -- Move along the Y-axis to the docking level
