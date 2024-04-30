@@ -15,46 +15,41 @@ function determineDirection()
     local newX, newY, newZ = gps.locate(5)
     print("Position after moving forward: X=" .. newX .. ", Y=" .. newY .. ", Z=" .. newZ)
 
-    -- Determine if X or Z has changed and print facing direction
-    if newX ~= startX then
-        if newX > startX then
-            print("Initially facing East")
-        else
-            print("Initially facing West")
-        end
-    elseif newZ ~= startZ then
-        if newZ > startZ then
-            print("Initially facing South")
-        else
-            print("Initially facing North")
-        end
+    -- Determine initial facing direction
+    local initialFacing = ""
+    if newX > startX then
+        initialFacing = "East"
+    elseif newX < startX then
+        initialFacing = "West"
+    elseif newZ > startZ then
+        initialFacing = "South"
+    elseif newZ < startZ then
+        initialFacing = "North"
     end
+    print("Initially facing " .. initialFacing)
 
     -- Move back to original position
     turtle.back()
 
-    -- Turn left and move forward to check again (optional verification)
+    -- Turn left and move forward to check again
     turtle.turnLeft()
     print("Turned left.")
     turtle.forward()
-    local checkX, checkY, checkZ = gps.locate(5)
-    print("Position after turning left and moving forward: X=" .. checkX .. ", Y=" .. checkY .. ", Z=" .. checkZ)
+    local checkX, _, checkZ = gps.locate(5)
     turtle.back()
 
-    -- Determine and print new facing direction after turn
-    if checkX ~= newX then
-        if checkX > newX then
-            print("Now facing East")
-        else
-            print("Now facing West")
-        end
-    elseif checkZ ~= newZ then
-        if checkZ > newZ then
-            print("Now facing South")
-        else
-            print("Now facing North")
-        end
+    -- Determine new facing direction
+    local newFacing = ""
+    if checkX > newX then
+        newFacing = "East"
+    elseif checkX < newX then
+        newFacing = "West"
+    elseif checkZ > newZ then
+        newFacing = "South"
+    elseif checkZ < newZ then
+        newFacing = "North"
     end
+    print("After turning left, now facing " .. newFacing)
 
     turtle.turnRight() -- Realign to original facing before the check
 end
