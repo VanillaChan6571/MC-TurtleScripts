@@ -3,48 +3,61 @@ function goTo(targetX, targetZ)
     if not currentX then
         print("GPS not available. Make sure you're in range of a GPS satellite network.")
         return
+    else
+        print("Current position: X=" .. currentX .. ", Y=" .. currentY .. ", Z=" .. currentZ)
     end
 
-    -- Assuming the turtle initially faces east
-    print("Assuming initial orientation is east.")
-
-    -- Move to target X
-    while currentX < targetX do
-        while not turtle.forward() do turtle.dig() end
-        currentX, _, _ = gps.locate(5)
+    -- Navigate to the correct X coordinate
+    if currentX < targetX then
+        while not facingEast() do turtle.turnRight() end
+        repeat
+            if not turtle.forward() then turtle.dig() end
+            currentX = gps.locate(5)
+        until currentX >= targetX
+    elseif currentX > targetX then
+        while not facingWest() do turtle.turnRight() end
+        repeat
+            if not turtle.forward() then turtle.dig() end
+            currentX = gps.locate(5)
+        until currentX <= targetX
     end
 
-    while currentX > targetX do
-        turtle.turnLeft()
-        turtle.turnLeft()  -- Now facing west
-        while not turtle.forward() do turtle.dig() end
-        turtle.turnLeft()
-        turtle.turnLeft()  -- Reorient to east
-        currentX, _, _ = gps.locate(5)
+    -- Navigate to the correct Z coordinate
+    if currentZ < targetZ then
+        while not facingSouth() do turtle.turnRight() end
+        repeat
+            if not turtle.forward() then turtle.dig() end
+            currentZ = gps.locate(5)
+        until currentZ >= targetZ
+    elseif currentZ > targetZ then
+        while not facingNorth() do turtle.turnRight() end
+        repeat
+            if not turtle.forward() then turtle.dig() end
+            currentZ = gps.locate(5)
+        until currentZ <= targetZ
     end
-
-    -- Adjust orientation to south for Z movement
-    turtle.turnRight()  -- Now facing south
-    print("Adjusted to face south for Z movement.")
-
-    while currentZ < targetZ do
-        while not turtle.forward() do turtle.dig() end
-        _, _, currentZ = gps.locate(5)
-    end
-
-    while currentZ > targetZ do
-        turtle.turnLeft()
-        turtle.turnLeft()  -- Now facing north
-        while not turtle.forward() do turtle.dig() end
-        turtle.turnLeft()
-        turtle.turnLeft()  -- Reorient to south
-        _, _, currentZ = gps.locate(5)
-    end
-
-    -- Adjust orientation to face north
-    turtle.turnLeft()
-    print("Final adjustment to face north.")
 end
 
--- Call the goTo function with your coordinates
+-- Direction checks
+function facingNorth()
+    local _, orientation = gps.locate(5)
+    return orientation == 0
+end
+
+function facingEast()
+    local _, orientation = gps.locate(5)
+    return orientation == 1
+end
+
+function facingSouth()
+    local _, orientation = gps.locate(5)
+    return orientation == 2
+end
+
+function facingWest()
+    local _, orientation = gps.locate(5)
+    return orientation == 3
+end
+
+-- Start the movement
 goTo(-337, -16)
