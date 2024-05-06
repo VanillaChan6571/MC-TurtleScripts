@@ -1,0 +1,40 @@
+while true do
+    -- Get the current timestamp
+    local timestamp = os.date("%Y-%m-%d %H:%M:%S")
+    
+    -- Print the timestamp and a message before starting excavation
+    print("Starting excavation at " .. timestamp)
+    
+    -- Start the excavate command. Replace '10' with the desired excavation dimension.
+    turtle.excavate(10)
+
+    -- Wait for 5 minutes (300 seconds)
+    os.sleep(300)
+    
+    -- Refuel the turtle
+    print("Refueling turtle...")
+    for slot = 1, 16 do -- Check each slot
+        turtle.select(slot)
+        if turtle.refuel(0) then -- Check if the item is a valid fuel
+            turtle.refuel("all") -- Refuel with all of this item
+        end
+    end
+
+    -- Turn around to face the chest
+    turtle.turnLeft()
+    turtle.turnLeft()
+
+    -- Deposit all items into the chest behind the turtle
+    print("Depositing items into the chest...")
+    for slot = 1, 16 do -- Assuming the turtle has 16 slots
+        turtle.select(slot)
+        turtle.drop() -- Assumes the chest is directly behind the turtle
+    end
+
+    -- Turn around to the original direction
+    turtle.turnLeft()
+    turtle.turnLeft()
+
+    -- Select the first slot again after operation
+    turtle.select(1)
+end
