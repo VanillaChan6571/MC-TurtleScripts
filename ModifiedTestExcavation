@@ -5,8 +5,8 @@ while true do
     -- Print the timestamp and a message before starting excavation
     print("Starting excavation at " .. timestamp)
     
-    -- Start the excavate command. Replace 'X' with the desired excavation dimension.
-    turtle.excavate(18)
+    -- Start the premade excavate command, replace 'X' with your desired excavation dimension
+    shell.run("excavate", "18")
 
     -- Wait for 5 minutes (300 seconds)
     os.sleep(300)
