@@ -9,13 +9,15 @@ while true do
     shell.run("excavate", "18")
 
     -- Print the complete
-    print("Excavation Complete at " .. timestamp "Cat Nap Time...")
+    print("Excavation Complete at " .. timestamp)
+    print("Cat Nap Time...")
 
     -- Wait for 5 minutes (300 seconds)
     os.sleep(300)
 
     -- Print the wake up
-    print("Cat woke up at " .. timestamp "Purring along..!")
+    print("Cat woke up at " .. timestamp)
+    print("Purring along..!")
     
     -- Refuel the turtle
     print("Refueling turtle...")
