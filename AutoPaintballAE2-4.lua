@@ -13,18 +13,18 @@ function handleItem(slotNumber)
                 print("Dropped magenta paint ball below")
                 return true
             else
-                print("Failed to drop magenta paint ball")
+                print("Failed to drop magenta paint ball below")
             end
         end
         
-        -- For any item (including magenta paint ball if dropping failed),
-        -- attempt to place/use it in front of the turtle
-        print("Attempting to place/use item in front of turtle")
-        if turtle.place() then
-            print("Successfully placed/used item: " .. item.name)
+        -- For any item (including magenta paint ball if dropping below failed),
+        -- attempt to drop it in front of the turtle
+        print("Attempting to drop item in front of turtle")
+        if turtle.drop() then
+            print("Successfully dropped item in front: " .. item.name)
             return true
         else
-            print("Failed to place/use item: " .. item.name)
+            print("Failed to drop item in front: " .. item.name)
         end
     else
         print("Slot " .. slotNumber .. " is empty")
@@ -43,6 +43,6 @@ while true do
     end
     
     -- Wait a bit before checking again
-    print("Waiting for 5 seconds before next check")
-    os.sleep(5)
+    print("Waiting for 3 seconds before next check")
+    os.sleep(3)
 end
