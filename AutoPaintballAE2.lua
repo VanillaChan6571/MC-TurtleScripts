@@ -10,7 +10,7 @@ end
 -- Main loop
 while true do
     -- Check each inventory slot
-    for slot = 1, 16 do
+    for slot = 1 do
         if checkSlot(slot, "appliedenergistics2:magenta_paint_ball") then
             -- Select the slot
             turtle.select(slot)
