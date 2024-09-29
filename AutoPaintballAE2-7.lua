@@ -2,11 +2,11 @@
 local itemCount = 0
 local maxItems = 5
 local specialItem = "appliedenergistics2:magenta_paint_ball"
-local dropDelay = 3  -- Delay in seconds before dropping the item
+local throwDelay = 3  -- Delay in seconds before throwing the item
+local mineDelay = 5   -- Delay in seconds before mining after 5th item
 
--- Function to check and handle the special item
+-- Function to handle the special item
 local function handleSpecialItem(item)
-    print("Checking item: " .. tostring(item.name))
     if item.name == specialItem then
         print("Special item found. Dropping down.")
         turtle.dropDown()
@@ -15,56 +15,49 @@ local function handleSpecialItem(item)
     return false
 end
 
--- Function to check if there's an item in slot 1
-local function hasItemInSlot1()
-    local item = turtle.getItemDetail(1)
-    return item ~= nil
+-- Function to throw item in front
+local function throwItem()
+    print("Throwing item in front")
+    turtle.drop()
 end
 
 -- Main loop
 print("Starting main loop")
 while true do
-    -- Check if there's already an item in slot 1
-    if hasItemInSlot1() then
-        print("Item already in slot 1. Processing it.")
-        local item = turtle.getItemDetail(1)
-        if not handleSpecialItem(item) then
-            itemCount = itemCount + 1
-            print("Item count: " .. itemCount)
+    print("Attempting to suck item from above")
+    local success, item = turtle.suckUp()
+    
+    if success then
+        itemCount = itemCount + 1
+        print("Item obtained. Count: " .. itemCount)
+        
+        -- Handle special item if necessary
+        if not handleSpecialItem(turtle.getItemDetail(1)) then
+            -- Wait before throwing
+            print("Waiting " .. throwDelay .. " seconds before throwing")
+            os.sleep(throwDelay)
+            
+            -- Throw the item
+            throwItem()
+        end
+        
+        -- Check if we've reached the maximum items
+        if itemCount >= maxItems then
+            print("Max items reached. Waiting " .. mineDelay .. " seconds before mining")
+            os.sleep(mineDelay)
+            
+            print("Mining block in front")
+            turtle.dig()
+            
+            print("Placing block back")
+            turtle.place()
+            
+            -- Reset the item count
+            itemCount = 0
+            print("Item count reset to 0")
         end
     else
-        print("Attempting to suck item from above")
-        -- Try to suck item from above
-        local success = turtle.suckUp()
-        
-        if success then
-            local item = turtle.getItemDetail(1)
-            print("Item obtained: " .. tostring(item.name))
-            -- Check if it's the special item
-            if not handleSpecialItem(item) then
-                itemCount = itemCount + 1
-                print("Item count: " .. itemCount)
-            end
-        else
-            print("No item obtained. Waiting for 1 second.")
-            -- If no item was sucked, wait a bit before trying again
-            os.sleep(1)
-        end
-    end
-    
-    -- Check if we've reached the maximum items
-    if itemCount >= maxItems then
-        print("Max items reached. Mining block in front.")
-        -- Mine the block in front
-        turtle.dig()
-        print("Waiting for " .. dropDelay .. " seconds")
-        -- Wait for 3 seconds
-        os.sleep(dropDelay)
-        print("Placing block back")
-        -- Place the block back
-        turtle.place()
-        -- Reset the item count
-        itemCount = 0
-        print("Item count reset to 0")
+        print("No item obtained. Waiting for 1 second.")
+        os.sleep(1)
     end
 end
