@@ -15,39 +15,56 @@ local function handleSpecialItem(item)
     return false
 end
 
+-- Function to check if there's an item in slot 1
+local function hasItemInSlot1()
+    local item = turtle.getItemDetail(1)
+    return item ~= nil
+end
+
 -- Main loop
 print("Starting main loop")
 while true do
-    print("Attempting to suck item from above")
-    -- Try to suck item from above
-    local success, item = turtle.suckUp()
-    
-    if success then
-        print("Item obtained: " .. tostring(item.name))
-        -- Check if it's the special item
+    -- Check if there's already an item in slot 1
+    if hasItemInSlot1() then
+        print("Item already in slot 1. Processing it.")
+        local item = turtle.getItemDetail(1)
         if not handleSpecialItem(item) then
             itemCount = itemCount + 1
             print("Item count: " .. itemCount)
-            
-            -- Check if we've reached the maximum items
-            if itemCount >= maxItems then
-                print("Max items reached. Mining block in front.")
-                -- Mine the block in front
-                turtle.dig()
-                print("Waiting for " .. dropDelay .. " seconds")
-                -- Wait for 3 seconds
-                os.sleep(dropDelay)
-                print("Placing block back")
-                -- Place the block back
-                turtle.place()
-                -- Reset the item count
-                itemCount = 0
-                print("Item count reset to 0")
-            end
         end
     else
-        print("No item obtained. Waiting for 1 second.")
-        -- If no item was sucked, wait a bit before trying again
-        os.sleep(1)
+        print("Attempting to suck item from above")
+        -- Try to suck item from above
+        local success = turtle.suckUp()
+        
+        if success then
+            local item = turtle.getItemDetail(1)
+            print("Item obtained: " .. tostring(item.name))
+            -- Check if it's the special item
+            if not handleSpecialItem(item) then
+                itemCount = itemCount + 1
+                print("Item count: " .. itemCount)
+            end
+        else
+            print("No item obtained. Waiting for 1 second.")
+            -- If no item was sucked, wait a bit before trying again
+            os.sleep(1)
+        end
+    end
+    
+    -- Check if we've reached the maximum items
+    if itemCount >= maxItems then
+        print("Max items reached. Mining block in front.")
+        -- Mine the block in front
+        turtle.dig()
+        print("Waiting for " .. dropDelay .. " seconds")
+        -- Wait for 3 seconds
+        os.sleep(dropDelay)
+        print("Placing block back")
+        -- Place the block back
+        turtle.place()
+        -- Reset the item count
+        itemCount = 0
+        print("Item count reset to 0")
     end
 end
