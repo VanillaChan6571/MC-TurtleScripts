@@ -1,7 +1,10 @@
--- Function to detect if block in front is obsidian
-function isObsidianAhead()
+-- Function to detect block type in front
+function getBlockAhead()
     local success, data = turtle.inspect()
-    return success and data.name == "minecraft:obsidian"
+    if success then
+        return data.name
+    end
+    return nil
 end
 
 -- Function to place blocks downward until hitting something
@@ -30,15 +33,31 @@ end
 
 -- Function to handle obstacle and turn if needed
 function handleObstacle()
-    if isObsidianAhead() then
+    local blockType = getBlockAhead()
+    
+    -- Handle regular obsidian (left turn pattern)
+    if blockType == "minecraft:obsidian" then
         print("Obsidian detected, turning left...")
         turtle.turnLeft()
         if turtle.forward() then
             turtle.turnLeft()
             return true
         else
-            print("Cannot complete turn pattern!")
+            print("Cannot complete left turn pattern!")
             turtle.turnRight() -- Turn back to original position
+            return false
+        end
+    
+    -- Handle crying obsidian (right turn pattern)
+    elseif blockType == "minecraft:crying_obsidian" then
+        print("Crying Obsidian detected, turning right...")
+        turtle.turnRight()
+        if turtle.forward() then
+            turtle.turnRight()
+            return true
+        else
+            print("Cannot complete right turn pattern!")
+            turtle.turnLeft() -- Turn back to original position
             return false
         end
     end
@@ -55,7 +74,7 @@ while true do
     
     -- Try to move forward
     if not turtle.forward() then
-        -- If blocked, check for obsidian and handle turn pattern
+        -- If blocked, check for obsidian types and handle turn pattern
         if not handleObstacle() then
             print("Path blocked and cannot turn!")
             break
